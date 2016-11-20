@@ -81,3 +81,23 @@ module.exports.getImage = function (url, savedPath ) {
         }
     )
 };
+
+module.exports.appendFile = function( path,data,mode )
+{
+    return new Promise(
+        (resolve,reject)=>
+        {
+
+            fs.appendFile(path,data,mode,(error)=>
+            {
+                if (error)
+                {
+                    reject(error);
+                } else
+                {
+                    resolve();
+                }
+            })
+        }
+    )
+};

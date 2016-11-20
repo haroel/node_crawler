@@ -41,7 +41,6 @@ function startCrawler ( _url_ )
                 let title = _tr.find("td:nth-child(2)").find("a:first-child").text();
                 let price = _tr.find("td:last-child").find("b:first-child").text();
                 let img = _tr.find("td:first-child").find("img").attr("lazy_src");
-
                 if (title !== "")
                 {
                     let log = `${title} ${' '.repeat( Math.max(1, NUM - title.length))}  价格:${price}\n`;
@@ -57,7 +56,10 @@ function startCrawler ( _url_ )
                     });
                 }
             });
-            p.catch(function(e) {
+            p.then(()=>
+            {
+                return $lib.appendFile(path.join(__dirname,"_log.txt"),_log,"utf-8");
+            }).catch(function(e) {
                 trace("下载错误,",e,e.url,e.savedPath);
             }).then(function() {
                 let nextPageUrl = $('.main').find(".pager").find("a.next").attr("href");
@@ -65,9 +67,6 @@ function startCrawler ( _url_ )
                 mainUrlObj.path = nextPageUrl;
                 startCrawler(url.format(mainUrlObj));
             });
-            fs.appendFile( path.join(__dirname,"_log.txt"),_log,"utf-8", function () {
-            });
-
         })
         .catch(function (err) {
             trace(err);
